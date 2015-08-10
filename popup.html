@@ -1,0 +1,84 @@
+<!doctype html>
+<!--
+ This page is shown when the extension button is clicked, because the
+ "browser_action" field in manifest.json contains the "default_popup" key with
+ value "popup.html".
+ -->
+<html ng-app="MaterialPasswordGeneratorApp">
+  <head>
+
+    <!-- Angular Material Dependencies -->
+    <script src="external/angular.min.js"></script>
+    <script src="external/angular-animate.min.js"></script>
+    <script src="external/angular-aria.min.js"></script>
+
+    <script src="external/angular-material.min.js"></script>
+
+    <script src="app.js"></script>
+    <script src="passwordGenerationService.js"></script>
+
+
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.9.4/angular-material.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic">
+
+
+    <title>Getting Started Extension's Popup</title>
+    <style>
+      body {
+        font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
+        font-size: 100%;
+      }
+      #status {
+        /* avoid an excessively wide status text */
+        white-space: pre;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        max-width: 400px;
+      }
+    </style>
+
+    <!--
+      - JavaScript and HTML must be in separate files: see our Content Security
+      - Policy documentation[1] for details and explanation.
+      -
+      - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
+     -->
+    
+  </head>
+  <body ng-controller="MainCtrl" style="min-width:300px;">
+  
+
+<div style="padding:20px;">
+<div style="position:relative;">
+
+    <md-checkbox ng-model="options.useNumbers" aria-label="Checkbox 1">Numbers</md-checkbox>
+
+
+    <md-checkbox ng-model="options.useLetters" aria-label="Checkbox 1">Letters</md-checkbox>
+
+
+    <md-input-container style="width: 50px;">
+        <label>Length</label>
+        <input required type="number" step="any" name="rate" ng-model="options.passwordLength" min="1" max="50">
+      </md-input-container>
+
+    <md-button class="md-fab md-mini" aria-label="Generate" ng-click="generate()" style="right:0; bottom:0; position:absolute;">
+        <md-icon md-svg-src="img/auto-fix.svg" style="width: 1.4em;"></md-icon>
+    </md-button>
+    <!--
+<md-button class="md-icon-button">
+  <md-icon md-svg-src="img/content-copy.svg"             aria-label="Cake"    ></md-icon>
+</md-button>
+   -->
+    <div id="result">{{result}}</div>
+    
+
+    <div id="buffer" style="height:0"></div>
+
+</div>
+</div>
+
+
+  </body>
+</html>
+
