@@ -44,7 +44,6 @@ app.controller('MainCtrl', function($scope, $mdSidenav, $mdToast, passwordGenera
 						.hideDelay(2000));
 				}
 			} else {
-				// TODO: change length automatically
 				$mdToast.show($mdToast.simple()
 					.content('Error. The length is too low to follow the rules.')
 					.position('top')
