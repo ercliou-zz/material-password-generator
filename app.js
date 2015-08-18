@@ -33,15 +33,22 @@ app.controller('MainCtrl', function($scope, $mdSidenav, $mdToast, passwordGenera
 	$scope.generate = function() {
 
 		if($scope.options.useNumbers || $scope.options.useLetters) {
+			if(hasMinimalLength($scope.options)){
+				$scope.result = passwordGenerationService.generatePassword($scope.options);
+				if($scope.doCopy) {
+					$scope.copyToClipboard($scope.result);
 
-			$scope.result = passwordGenerationService.generatePassword($scope.options);
-			if($scope.doCopy) {
-				$scope.copyToClipboard($scope.result);
-
+					$mdToast.show($mdToast.simple()
+						.content('Copied to clipboard!')
+						.position('top')
+						.hideDelay(2000));
+				}
+			} else {
+				// TODO: change length automatically
 				$mdToast.show($mdToast.simple()
-					.content('Copied to clipboard!')
+					.content('Error. The length is too low to follow the rules.')
 					.position('top')
-					.hideDelay(2000));
+					.hideDelay(3000));
 			}
 		} else {
 			$mdToast.show($mdToast.simple()
@@ -49,6 +56,17 @@ app.controller('MainCtrl', function($scope, $mdSidenav, $mdToast, passwordGenera
 				.position('top')
 				.hideDelay(3000));
 		}
+	}
+
+	function hasMinimalLength() {
+		return $scope.options.passwordLength >= minimalLength($scope.options);
+	}
+
+	function minimalLength(options) {
+		var count = 0;
+		if(options.useNumbers) count++;
+		if(options.useLetters) count++;
+		return count;
 	}
 
 
