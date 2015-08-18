@@ -1,17 +1,15 @@
 {
   "manifest_version": 2,
 
-  "name": "Getting started example",
-  "description": "This extension shows a Google Image search result for the current page",
-  "version": "1.0",
+  "name": "Material Password Generator",
+  "description": "This extension generates custom passwords beautifully.",
+  "version": "1.0.1",
 
   "browser_action": {
-    "default_icon": "key-variant.png",
+    "default_icon": "logo58.png",
     "default_popup": "popup.html",
     "default_title": "Generate password"
   },
   "permissions": [
-    "activeTab",
-    "https://ajax.googleapis.com/"
   ]
 }

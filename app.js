@@ -1,48 +1,72 @@
 var app = angular.module('MaterialPasswordGeneratorApp', ['ngMaterial']);
 
-app.config(function($mdThemingProvider) {
-  $mdThemingProvider.theme('default')
-    .primaryPalette('pink')
-    .accentPalette('orange');
+app.constant("primaryPalette", "green")
+.constant("accentPalette", "deep-orange")
+.config(function($mdThemingProvider, primaryPalette, accentPalette) {
+	$mdThemingProvider.theme('default')
+	.primaryPalette(primaryPalette)
+	.accentPalette(accentPalette);
+})
+.run(function ($rootScope, $mdColorPalette) {
+	$rootScope.getMaterialColor = function (base, shade) {            
+		var color = $mdColorPalette[base][shade].value;
+		return 'rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')';
+	};
 });
 
-app.controller('MainCtrl', function($scope, $mdSidenav, passwordGenerationService) {
+app.controller('MainCtrl', function($scope, $mdSidenav, $mdToast, passwordGenerationService, primaryPalette, accentPalette) {
 
-	$scope.result= '';
+	$scope.accentRgb = $scope.getMaterialColor(primaryPalette, 400)
 
+	//$scope.result= '';
+	$scope.doCopy = true;
 	$scope.options = {
 		useNumbers: true,
 		useLetters: true,
 		passwordLength: 10
 	}
-  
 
-  $scope.toggleSidenav = function(menuId) {
-    $mdSidenav(menuId).toggle();
-  };
+	$scope.toggleSidenav = function(menuId) {
+		$mdSidenav(menuId).toggle();
+	};
 
-  $scope.generate = function() {
-  	$scope.result = passwordGenerationService.generatePassword($scope.options);
-  	$scope.copyToClipboard($scope.result)
-  }
+	$scope.generate = function() {
+
+		if($scope.options.useNumbers || $scope.options.useLetters) {
+
+			$scope.result = passwordGenerationService.generatePassword($scope.options);
+			if($scope.doCopy) {
+				$scope.copyToClipboard($scope.result);
+
+				$mdToast.show($mdToast.simple()
+					.content('Copied to clipboard!')
+					.position('top')
+					.hideDelay(2000));
+			}
+		} else {
+			$mdToast.show($mdToast.simple()
+				.content('Error. Please select at least one type of character.')
+				.position('top')
+				.hideDelay(3000));
+		}
+	}
 
 
-  $scope.copyToClipboard = function(s) {
+	$scope.copyToClipboard = function(s) {
 
-  	var el = document.getElementById('buffer');
-  	el.innerText = s;
+		var el = document.getElementById('buffer');
+		el.innerText = s;
 
-	var result = document.querySelector('#buffer');  
-	var range = document.createRange();  
-	range.selectNode(result);  
-	window.getSelection().addRange(range);  
+		var result = document.querySelector('#buffer');  
+		var range = document.createRange();  
+		range.selectNode(result);  
+		window.getSelection().addRange(range);  
 
 
-	document.execCommand('copy');
-	window.getSelection().removeAllRanges();
+		document.execCommand('copy');
+		window.getSelection().removeAllRanges();
 
-	el.innerText = '';
+		el.innerText = '';
+	}
 
-  }
- 
 });
